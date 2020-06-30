@@ -28,6 +28,7 @@
 """This module provides utilities for calculating detector responses and timing
 between observatories.
 """
+import logging
 import lalsimulation
 import numpy as np
 import lal
@@ -152,7 +153,7 @@ class Detector(object):
 
         cosgha = cos(gha)
         singha = sin(gha)
-        cosdec = cos(declination)
+      	cosdec = cos(declination)
         sindec = sin(declination)
         cospsi = cos(polarization)
         sinpsi = sin(polarization)

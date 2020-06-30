@@ -116,14 +116,12 @@ class JointDistribution(object):
                 draw = dist.rvs(n_test_samples)
                 for param in dist.params:
                     samples[param] = draw[param][:]
-
+	    logging.info("Drew samples")
             # evaluate constraints
             result = numpy.ones(len(tuple(samples.values())[0]), dtype=bool)
-            for n in numpy.arange(n_test_samples):
-                sample = {param: samples[param][n] for param in distparams}
-                for constraint in self._constraints:
-                    result[n] = constraint(sample) & result[n]
-
+            for constraint in self._constraints:
+                result = constraint(samples) & result
+	    logging.info("Evaluated constraints") 
             # set new scaling factor for prior to be
             # the fraction of acceptances in random sampling of entire space
             self._pdf_scale = result.sum() / float(n_test_samples)
@@ -131,7 +129,7 @@ class JointDistribution(object):
                 raise ValueError("None of the random draws for pdf "
                     "renormalization satisfied the constraints. "
                     " You can try increasing the 'n_test_samples' keyword.")
-
+	    logging.info("Set scale factor")
         else:
             self._pdf_scale = 1.0
 
